@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -5,8 +6,12 @@ import java.util.Scanner;
  * hora que for inserida, onde caso não seja uma nota válida, o sistema irá esperar
  * que seja inserida uma nota válida, após as notas coletadas será realizado o calcúlo
  * da média e por fim informa o estado de aprovação do aluno com base na sua média.
+ *
+ * @author Elenilton Silva
+ * @version 1.0
+ * @since 2024
  */
-public class Main {
+public class MainMedia {
     public static void main(String[] args) {
         Scanner entrada = new Scanner(System.in);
         System.out.println("\n -=-=-=- Sistema de Média -=-=-=- \n");
@@ -19,16 +24,22 @@ public class Main {
         for (int i = 0; i < notas.length; i++) {
             boolean notaValida;
 
-            do { // Loop para permitir que a nota apenas seja armazenada caso a nota esteja válida.
+            do { // Loop para permitir que apenas notas validas sejam armazenadas.
                 System.out.print(" - Informe a " + (i + 1) + "° nota: ");
-                double nota = entrada.nextDouble();
 
-                notaValida = media.validarNota(nota); // - Valida a nota.
+                try {
+                    double nota = entrada.nextDouble();
+                    notaValida = media.validarNota(nota); // - Valida a nota.
 
-                if (notaValida) {
-                    notas[i] = nota; // - Armazena a nota no arreio.
-                } else {
-                    System.out.println("\n - Nota invalida! Tente novamente!");
+                    if (notaValida) {
+                        notas[i] = nota; // - Armazena a nota no arreio.
+                    } else {
+                        System.out.println("\n - Nota invalida! Tente novamente!");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("\n - Entrada inválida! Insira apenas números.");
+                    entrada.next();
+                    notaValida = false;
                 }
             }while (!notaValida);
         }
